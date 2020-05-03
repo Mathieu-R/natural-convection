@@ -6,10 +6,19 @@
   \item Le fluide colle à la plaque : $v = 0$ en $x = 0$.
   \item Le fluide est au repos loins de la plaque : $u = v = 0$.
   \item Le fluide est plus chaud proche de la plaque: $T_w > T_e$.
+  \item $\delta << Y$
 \end{itemize}
 
 \noindent On suppose que l'écoulement n'existe que dans la couche limite ($\delta(x)$). \\ 
 Dès lors on peut utiliser \textbf{les équations de Prandtl} en y ajoutant \textbf{le terme lié à la poussée d'Archimède} et en négligeant \textbf{la dissipation visqueuse}.
+
+\noindent Hypothèses de Prandtl
+
+\begin{itemize}
+  \item L'écoulement est à grand nombre de Reynolds.
+  \item L'épaisseur de la couche limite dépend du nombre de Reynolds $(\frac{\delta}{Y} = \frac{1}{\sqrt{Re}})$.
+  \item Les forces d'inertie, de pression et de viscosité sont du même ordre de grandeur dans la couche limite.
+\end{itemize}
 
 \begin{itemize}
   \item Poussée d'Archimède (la pression ne dépend que de la profondeur) : $P(x, y) = \rho g y$
@@ -21,7 +30,7 @@ Dès lors on peut utiliser \textbf{les équations de Prandtl} en y ajoutant \tex
 \end{equation}
 
 \begin{itemize}
-  \item Nombre de Grasshof : $\frac{(()\text{"poussée d'Archimède"})(\text{terme d'inertie}))}{(\text{forces visqueuses})^2}$
+  \item Nombre de Grasshof : $\frac{(\text{"poussée d'Archimède"})(\text{terme d'inertie})}{(\text{forces visqueuses})^2} = \frac{\beta \Delta T g L^3}{\nu^2}$
 \end{itemize}
 
 \begin{center}
@@ -40,6 +49,9 @@ Dès lors on peut utiliser \textbf{les équations de Prandtl} en y ajoutant \tex
     \path (2,2) coordinate (p2)
     \draw[blue] (p1) to [bend] (p2)
     \node (3,4) {$u = v = 0$}
+    % axes
+    \draw (-0.5, 0) <-Y-> (-0.5,4)
+    \draw (4.5, 0) <-$\delta(y)$-> (4.5,3)
   \end{tikzpicture}
 \end{center}
 
