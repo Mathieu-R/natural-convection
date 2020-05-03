@@ -12,12 +12,12 @@ import numpy as np
 
 from decimal import Decimal
 from edo_solver.rk4 import RK4Method
-from edo_solver.edo import blasius_edo_flow, blasius_edo_heat
+from edo_solver.edo import blasius_edo_flow, blasius_edo_heat, blasius_edo
 
 from utils import day_to_seconds, hour_to_seconds, minute_to_seconds, seconds_to_hour
 from constants import PRECISION
 
-def compute_blasius_edo_flow(title, stop):
+def compute_blasius_edo(title, stop):
   # default values
   T0 = 0
   TIME_INTERVAL = 10 # 10s
@@ -30,8 +30,6 @@ def compute_blasius_edo_flow(title, stop):
 
   full_time_range = np.arange(T0, STOP + TIME_INTERVAL, TIME_INTERVAL)
 
-  # initial values
-  f_init = [0, 0] # f(0), f'(0)
   # boundary value
   fprimeinf = 0 
   fprimeguess = 2
@@ -48,10 +46,14 @@ def compute_blasius_edo_flow(title, stop):
     # and r_1 <= 0 <= r_2
 
     # then we solve the EDO for f''(0) = s
-    s = s_1 + s_2 / 2
-    f_init = [0, 0, s]
+    s = (s_1 + s_2) / 2
 
-    fluid_flow = RK4Method(blasius_edo_flow, f_init, full_time_range, TIME_INTERVAL)
+    # initial values
+    f_init = [0, 0, s] # f(0), f'(0), f''(0)
+    theta_init = [1, s] # theta(0), theta'(0)
+    ci = [f_init, theta_init]
+
+    fluid_flow = RK4Method(blasius_edo, ci, full_time_range, TIME_INTERVAL)
     fluid_flow.resolve()
 
     time = fluid_flow.full_time_range
@@ -59,7 +61,8 @@ def compute_blasius_edo_flow(title, stop):
 
     # then we choose the next s_1 and s_2
     # adjust our shoot
-    if y_set[-1] > s:
+    print(y_set)
+    if y_set[-1] < ...:
       s_1 = s
     else: 
       s_2 = s
@@ -68,7 +71,7 @@ def compute_blasius_edo_flow(title, stop):
 
     #fluid_flow.graph(title, legends, x_label, y_label)
 
-compute_blasius_edo_flow(
+compute_blasius_edo(
   title="",
   stop=minute_to_seconds(10)
 )
