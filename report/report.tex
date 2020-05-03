@@ -1,0 +1,115 @@
+\documentclass{tufte-handout}
+
+% ------ PREAMBLE ------- %
+
+% colored hyperlink
+\hypersetup{colorlinks}
+
+% book metadata (always in preamble)
+\title{Natural convection \\ \noindent Blasius problem}
+\author{Mathieu Rousseau}
+\publisher{}
+
+% turn on numbering for parts and chapters 
+\setcounter{secnumdepth}{1} 
+
+\usepackage{silence}
+% Filter warnings issued by package biblatex starting with "Patching footnotes failed"
+\WarningFilter{biblatex}{Patching footnotes failed}
+
+%\usepackage[autopunct=false,backend=biber]{biblatex}
+%\addbibresource{navier-stokes.bib} % with extension
+
+\usepackage{amsmath, amssymb}
+\usepackage{setspace, enumerate, tikz}
+
+% typeset system of equations the easy way
+% http://ftp.snt.utwente.nl/pub/software/tex/macros/generic/systeme/systeme_fr.pdf
+\usepackage{systeme}
+
+% add nabla, derivatives, bra-ket,... for physics
+% http://mirrors.ibiblio.org/CTAN/macros/latex/contrib/physics/physics.pdf
+\usepackage[arrowdel]{physics}
+
+% https://tex.stackexchange.com/questions/167948/package-rerunfilecheck-warning-file-out-has-changed
+\usepackage{bookmark}
+
+% beautiful tables
+\usepackage{booktabs}
+
+% prints an asterisk that takes up no horizontal space.
+% useful in tabular environments.
+\newcommand{\hangstar}{\makebox[0pt][l]{*}}
+
+% Prints argument within hanging parentheses (i.e., parentheses that take
+% up no horizontal space).  Useful in tabular environments.
+\newcommand{\hangp}[1]{\makebox[0pt][r]{(}#1\makebox[0pt][l]{)}}
+
+% graphics / images
+% \graphicspath{{}} = path of the img folder
+\usepackage{graphicx}
+\setkeys{Gin}{width=\linewidth,totalheight=\textheight,keepaspectratio}
+\graphicspath{{figures/}}
+
+% to use a slightly smaller font
+\usepackage{fancyvrb}
+\fvset{fontsize=\normalsize}
+
+% prints a trailing space in a smart way.
+\usepackage{xspace}
+
+% go to line the easy way 
+\usepackage[parfill]{parskip}
+
+% units
+\usepackage{siunitx}
+\sisetup{locale = FR}
+
+% increase vertical space for aligned equations
+\setlength{\jot}{7pt}
+
+% box around text
+\usepackage{framed}
+
+% for theorem, proposition,...
+% set a line break after the label 
+\usepackage[framed]{ntheorem}
+\theoremstyle{break}
+
+\newframedtheorem{defn}{Définition}%[section]
+\newframedtheorem{prop}{Proposition}%[section]
+\newtheorem{example}{Exemple}%[section]
+\newtheorem{proof}{Preuve}
+
+% conditions for equations
+% https://tex.stackexchange.com/questions/95838/how-to-write-a-perfect-equation-parameters-description
+\newenvironment{conditions}
+  {\par\vspace{\abovedisplayskip}\noindent\begin{tabular}{>{$}l<{$} @{${}={}$} l}}
+  {\end{tabular}\par\vspace{\belowdisplayskip}}
+
+% generates an index
+\usepackage{makeidx}
+\makeindex
+
+% commands shortcuts
+\newcommand{\mb}{\mathbb}
+\newcommand{\R}{\mb{R}}
+\newcommand{\dS}{\cdot d\vec{S}}
+
+% ------ DOCUMENT ------%
+
+\begin{document}
+
+%\frontmatter
+\maketitle
+\tableofcontents
+
+\newpage
+
+%\mainmatter
+
+\input{tex/derivation.tex}
+
+%\printbibliography
+
+\end{document}

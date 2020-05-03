@@ -1,0 +1,53 @@
+\section{Dérivation}
+
+\noindent Nous allons analyser la convection naturelle le long d'une plaque chauffée verticale plane dont le bas se situe en $y=0$.
+
+\begin{itemize}
+  \item Le fluide colle à la plaque : $v = 0$ en $x = 0$.
+  \item Le fluide est au repos loins de la plaque : $u = v = 0$.
+  \item Le fluide est plus chaud proche de la plaque: $T_w > T_e$.
+\end{itemize}
+
+\noindent On suppose que l'écoulement n'existe que dans la couche limite ($\delta(x)$). \\ 
+Dès lors on peut utiliser \textbf{les équations de Prandtl} en y ajoutant \textbf{le terme lié à la poussée d'Archimède} et en négligeant \textbf{la dissipation visqueuse}.
+
+\begin{itemize}
+  \item Poussée d'Archimède (la pression ne dépend que de la profondeur) : $P(x, y) = \rho g y$
+\end{itemize}
+
+\noindent On peut obtenir une solution de similitude en définissant :
+\begin{equation}
+  \eta(x,y) = \frac{x}{\delta(y)} = \frac{x}{y} \left( \frac{Gr(y)}{4} \right)^{1/4}
+\end{equation}
+
+\begin{itemize}
+  \item Nombre de Grasshof : $\frac{(()\text{"poussée d'Archimède"})(\text{terme d'inertie}))}{(\text{forces visqueuses})^2}$
+\end{itemize}
+
+\begin{center}
+  \begin{tikzpicture}
+    % plaque chaude
+    \draw (0,0) -- (0,5); node [below] {$y=0$}
+    % couche limite
+    \draw (0,0) parabola (2, 5);
+    % profil de température
+    \node[text=red] (-1,4.5) {$T_w$}
+    \draw[red] (0,4.5) parabola (4,3);
+    \node[text=red] (2,4) {$T_e$}
+    % profil de vitesse
+    \draw (-1,2) {v=0}
+    \path (0,2) coordinate (p1)
+    \path (2,2) coordinate (p2)
+    \draw[blue] (p1) to [bend] (p2)
+    \node (3,4) {$u = v = 0$}
+  \end{tikzpicture}
+\end{center}
+
+On part des équations de Navier-Stokes 2D :
+
+\begin{align}
+  \pdv{u}{x} + \pdv{v}{y} &= 0 \qq{(\textit{fluide incompressible})} \\
+  \rho \left[ u \pdv{u}{x} + v \pdv{u}{y} \right] &= - \pdv{P}{x} + \mu \left[ \pdv[2]{u}{x} + \pdv[2]{u}{y} \right] \qq{(\textit{fluid flow})} \\
+  \rho \left[ v \pdv{u}{x} + v \pdv{v}{y} \right] &= - \pdv{P}{y} + \mu \left[ \pdv[2]{u}{x} + \pdv[2]{u}{y} \right] \qq{(\textit{fluid flow})} \\
+  u \pdv{T}{x} + v \pdv{T}{y} &= \alpha \left[\pdv[2]{T}{x} + \pdv[2]{T}{y} \right] \qq{(heat flow)}
+\end{align}
