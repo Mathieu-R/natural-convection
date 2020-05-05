@@ -17,7 +17,7 @@ def blasius_edo_flow(self, t, f, theta):
   return np.array([
     f[1], # f' = df/dn
     f[2], # f'' = d^2f/dn^2
-    - 3 * f[1] * f[2] + 2 * math.pow(f[1], 2) - theta[0] # f''' = - 3ff'' + 2(f')^2 - theta
+    - 3 * f[0] * f[2] + 2 * math.pow(f[1], 2) - theta[0] # f''' = - 3ff'' + 2(f')^2 - theta
   ])
 
 """
@@ -33,12 +33,18 @@ def blasius_edo_heat(self, t, f, theta):
     - 3 * self.prandtl * f[0] * theta[1] # theta'' = - 3 Pr f theta'
   ])
 
-
+"""
+y = [f, f', f'', theta, theta']
+"""
 def blasius_edo(self, t, y):
-  f = y[0]
-  theta = y[1]
-
-  new_f = blasius_edo_flow(self, t, f, theta)
-  new_theta = blasius_edo_heat = blasius_edo_heat(self, t, f, theta)
-
-  return np.array([new_f, new_theta])
+  f = y[0:3]
+  theta = y[3:5]
+  return np.array([
+    # flow edo
+    f[1], # f' = df/dn
+    f[2], # f'' = d^2f/dn^2
+    - 3 * f[0] * f[2] + (2 * math.pow(f[1], 2)) - theta[0], # f''' = - 3ff'' + 2(f')^2 - theta,
+    # heat edo
+    theta[1], # theta' = dtheta/dn
+    - 3 * self.prandtl * f[0] * theta[1], # theta'' = - 3 Pr f theta'
+  ])

@@ -20,24 +20,28 @@ from constants import PRECISION
 def compute_blasius_edo(title, stop):
   # default values
   T0 = 0
-  TIME_INTERVAL = 10 # 10s
+  ETA_INTERVAL = 0.1
   STOP = stop
 
   title = title
-  x_label = ""
+  x_label = "$\displaystyle\eta$"
   y_label = ""
-  legends = ['', '']
+  legends = ["$f'(\eta)$", "$\\theta$"]
 
-  full_time_range = np.arange(T0, STOP + TIME_INTERVAL, TIME_INTERVAL)
+  # time range which is not a time range in this case
+  # I think the absciss is eta
+  full_time_range = np.arange(T0, STOP + ETA_INTERVAL, ETA_INTERVAL)
 
   # boundary value
-  fprimeinf = 0 
-  fprimeguess = 2
+  fprimeinf = 0 # f'(eta -> infty) = 0
+  fprimeguess = 1 # guess for f''(0)
 
   # starting value for missing conditions
   # f''(0) = a
-  s_1 = 0.1
-  s_2 = 0.7
+  s_1 = 0.0
+  s_2 = 1.0
+
+  print(s_1, s_2)
 
   # SHOOT
   while abs(fprimeguess - fprimeinf) > PRECISION:
@@ -47,33 +51,44 @@ def compute_blasius_edo(title, stop):
     # and r_1 <= 0 <= r_2
 
     # then we solve the EDO for f''(0) = s
-    s = (s_1 + s_2) / 2
+    s = ((s_1 + s_2) / 2)
+    print("s", s)
 
     # initial values
     f_init = [0, 0, s] # f(0), f'(0), f''(0)
-    theta_init = [1, s, 0] # theta(0), theta'(0)
-    ci = [f_init, theta_init]
+    theta_init = [1, s] # theta(0), theta'(0)
+    ci = f_init + theta_init # concatenate two ci
 
     edo = [blasius_edo_flow, blasius_edo_heat]
-    fluid_flow = RK4Method(edo, f_init, theta_init, full_time_range, TIME_INTERVAL)
-    fluid_flow.resolve()
+    flow = RK4Method(blasius_edo, ci, full_time_range, ETA_INTERVAL)
+    flow.resolve()
 
-    time = fluid_flow.full_time_range
-    y_set = fluid_flow.y_set
+    time = flow.full_time_range
+    y_set = flow.y_set
 
     # then we choose the next s_1 and s_2
     # adjust our shoot
-    print(y_set)
-    if y_set[-1] < fprimeinf:
+    # compare f'(eta)
+    # y_set[-1, 0] := last row (last values calculated), 1st column (f')
+    #print("trololo", y_set)
+    #print(y_set[-1, 0])
+    fprimeguess = y_set[-1, 0]
+    #print(fprimeguess, fprimeinf)
+
+    # if our guess is below the curve
+    # we try to go upward
+    if fprimeguess < fprimeinf:
       s_1 = s
+      #print("s_1", s_1)
+    # if our guess is above the curve
+    # we try to go downward
     else: 
       s_2 = s
+      #print("s_2", s_2)
 
-    fprimeguess = y_set[-1]
-
-  fluid_flow.graph(title, legends, x_label, y_label)
+  flow.graph(title, legends, x_label, y_label)
 
 compute_blasius_edo(
-  title="",
-  stop=minute_to_seconds(10)
+  title="Convection naturelle - Solution de similitude",
+  stop=1
 )
