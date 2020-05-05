@@ -31,6 +31,7 @@ def compute_blasius_edo(title, stop):
   # time range which is not a time range in this case
   # I think the absciss is eta
   full_time_range = np.arange(T0, STOP + ETA_INTERVAL, ETA_INTERVAL)
+  print(full_time_range)
 
   # boundary value
   fprimeinf = 0 # f'(eta -> infty) = 0
@@ -46,7 +47,7 @@ def compute_blasius_edo(title, stop):
   # SHOOT
   while abs(fprimeguess - fprimeinf) > PRECISION:
     # because f'(b) = 0 (btw, "b" is our way to do eta -> infty ; we take "b" big enough)
-    # so we choose f''(0) = s_1 and f''(0) = s_2 
+    # so we choose f''(0) = s_1 and f''(0) = s_2
     # such that f'(b) = r_1 and f'(b) = r_2
     # and r_1 <= 0 <= r_2
 
@@ -69,20 +70,21 @@ def compute_blasius_edo(title, stop):
     # then we choose the next s_1 and s_2
     # adjust our shoot
     # compare f'(eta)
-    # y_set[-1, 0] := last row (last values calculated), 1st column (f')
+    # y_set[-1, 1] := last row (last values calculated), 2nd column (f')
     #print("trololo", y_set)
     #print(y_set[-1, 0])
-    fprimeguess = y_set[-1, 0]
+    fprimeguess = y_set[-1, 1]
     #print(fprimeguess, fprimeinf)
 
     # if our guess is below the curve
     # we try to go upward
+    # remember: s_1 <= s <= s_2
     if fprimeguess < fprimeinf:
       s_1 = s
       #print("s_1", s_1)
     # if our guess is above the curve
     # we try to go downward
-    else: 
+    else:
       s_2 = s
       #print("s_2", s_2)
 
@@ -90,5 +92,5 @@ def compute_blasius_edo(title, stop):
 
 compute_blasius_edo(
   title="Convection naturelle - Solution de similitude",
-  stop=1
+  stop=5
 )

@@ -23,7 +23,7 @@ class EDONumericalResolution:
     self.ci = ci
     self.full_time_range = full_time_range
     self.time_step = time_step
-    
+
     self.prandtl = 0.01
 
     # keep track of data
@@ -33,9 +33,11 @@ class EDONumericalResolution:
   def resolve(self, **kwargs):
     raise NotImplemented
 
+  # we plot f'(eta) and theta(eta)
+  # remember: after integration => self.y_set [...,[f, f', f'', theta, theta'],...]
   def graph(self, title, edo_legends, x_label, y_label):
-    full_time_range_in_hours = np.fromiter(map(lambda t: seconds_to_hour(t), self.full_time_range), dtype=np.float)
-    plt.plot(full_time_range_in_hours, self.y_set)
+    plt.plot(self.full_time_range, self.y_set[:, 1], 'b')
+    plt.plot(self.full_time_range, self.y_set[:, 3], 'r')
     plt.title(title)
     # https://stackoverflow.com/questions/44632571/pyplot-legend-only-displaying-one-letter?noredirect=1&lq=1
     plt.legend(edo_legends, loc="upper right")

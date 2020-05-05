@@ -1,4 +1,4 @@
-import numpy as np 
+import numpy as np
 import math
 
 """
@@ -35,6 +35,14 @@ def blasius_edo_heat(self, t, f, theta):
 
 """
 y = [f, f', f'', theta, theta']
+dy/dn = [f', f'', f''', theta', theta'']
+
+after integration we get back :
+y = [f, f', f'', theta, theta']
+
+with :
+f''' = - 3ff'' + 2(f')^2 - theta
+theta'' = - 3 Pr f theta'
 """
 def blasius_edo(self, t, y):
   f = y[0:3]
