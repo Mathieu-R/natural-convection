@@ -10,84 +10,86 @@ RK4 + Shooting Method
 
 import numpy as np
 
-from decimal import Decimal
-from edo_solver.rk4 import RK4Method
-from edo_solver.edo import basic_blasius_edo, blasius_edo
+from scipy.integrate import odeint
+from scipy.optimize import newton
 
-from utils import day_to_seconds, hour_to_seconds, minute_to_seconds, seconds_to_hour
+from decimal import Decimal
+from edo_solver.edo import basic_blasius_edo, blasius_edo
+from edo_solver.plot import plot
+
 from constants import PRECISION
 
-def compute_blasius_edo(title, stop):
-  # default values
-  T0 = 0
-  ETA_INTERVAL = 0.1
-  STOP = stop
+def rk4(eta_range, shoot):
+  #print(shoot)
+  prandtl = 0.01
 
-  title = title
-  x_label = "$\eta$"
-  y_label = ""
-  legends = ["$f'(\eta)$", "$\\theta$"]
+  # initial values
+  f_init = [0, 0, shoot] # f(0), f'(0), f''(0)
+  theta_init = [1, shoot] # theta(0), theta'(0)
+  ci = f_init + theta_init # concatenate two ci
 
-  # time range which is not a time range in this case
-  # I think the absciss is eta
-  full_time_range = np.arange(T0, STOP + ETA_INTERVAL, ETA_INTERVAL)
+  #print("trololo")
+  #print(eta_range)
 
+  # note: tuple with single argument must have "," at the end of the tuple
+  #print(ci)
+  return odeint(func=blasius_edo, y0=ci, t=eta_range, args=(prandtl,))
+
+"""
+if we have :
+f'(t_0) = fprime_t0 ; f'(eta -> infty) = fprime_inf
+we can transform it into :
+f'(t_0) = fprime_t0 ; f''(t_0) = a
+
+we define the function F(a) = f'(infty ; a) - fprime_inf
+if F(a) has a root in "a",
+then the solutions to the initial value problem with f''(t_0) = a
+is also the solution the boundary problem with f'(eta -> infty) = fprime_inf
+
+our goal is to find the root, we have the root...we have the solution.
+it can be done with bissection method or newton method.
+"""
+def shooting(eta_range):
   # boundary value
   fprimeinf = 0 # f'(eta -> infty) = 0
-  fprimeguess = 1 # guess for f''(0)
 
-  # starting value for missing conditions
-  # f''(0) = a
-  s_1 = 0.0
-  s_2 = 1.0
+  # initial guess
+  # as far as I understand
+  # it has to be the good guess
+  # otherwise the result can be completely wrong
+  initial_guess = 1 # guess for f''(0)
 
-  print(s_1, s_2)
+  # define our function to optimize
+  # our goal is to take big eta because eta should approach infty
+  # [-1, 2] : last row, second column => f'(eta_final) ~ f'(eta -> infty)
+  fun = lambda initial_guess: rk4(eta_range, initial_guess)[-1, 1] - fprimeinf
+  # newton method resolve the ODE system until eta_final
+  # then adjust the shoot and resolve again until we have a correct shoot
+  shoot = newton(func=fun, x0=initial_guess)
 
-  n = 1
-  iter_max = 40
+  # resolve our system of ODE with the good "a"
+  y = rk4(eta_range, shoot)
+  return y
 
-  # SHOOT
-  while (abs(fprimeguess - fprimeinf) > PRECISION and n <= iter_max):
-    # because f'(b) = 0 (btw, "b" is our way to do eta -> infty ; we take "b" big enough)
-    # so we choose f''(0) = s_1 and f''(0) = s_2
-    # such that f'(b) = r_1 and f'(b) = r_2
-    # and r_1 <= 0 <= r_2
+def compute_blasius_edo(title, eta_final):
+  ETA_0 = 0
+  ETA_INTERVAL = 0.1
+  ETA_FINAL = eta_final
 
-    # then we solve the EDO for f''(0) = s
-    s = ((s_1 + s_2) / 2)
+  # default values
+  title = title
+  x_label = "$\eta$"
+  y_label = "profil de vitesse $(f'(\eta))$ / profil de température $(\\theta)$"
+  legends = ["$f'(\eta)$", "$\\theta$"]
 
-    # initial values
-    f_init = [0, 0, s] # f(0), f'(0), f''(0)
-    theta_init = [1, s] # theta(0), theta'(0)
-    ci = f_init + theta_init # concatenate two ci
+  eta_range = np.arange(ETA_0, ETA_FINAL + ETA_INTERVAL, ETA_INTERVAL)
 
-    flow = RK4Method(blasius_edo, ci, full_time_range, ETA_INTERVAL)
-    flow.resolve()
+  # shoot
+  y_set = shooting(eta_range)
 
-    time = flow.full_time_range
-    y_set = flow.y_set
-
-    # then we choose the next s_1 and s_2
-    # adjust our shoot
-    # compare f'(eta)
-    # y_set[-1, 1] := last row (last values calculated), 2nd column (f')
-    fprimeguess = y_set[-1, 1]
-
-    # if our guess is below the curve
-    # we try to go upward
-    # remember: s_1 <= s <= s_2
-    if fprimeguess < fprimeinf:
-      s_1 = s
-    # if our guess is above the curve
-    # we try to go downward
-    else:
-      s_2 = s
-
-    n += 1
-
-  flow.graph(title, legends, x_label, y_label)
+  plot(eta_range, y_set, title, legends, x_label, y_label)
 
 compute_blasius_edo(
   title="Convection naturelle - Solution de similitude",
-  stop=4
+  eta_final=5
 )
