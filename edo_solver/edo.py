@@ -30,7 +30,7 @@ theta(eta -> infty) = 0
 def blasius_edo_heat(self, t, f, theta):
   return np.array([
     theta[1], # theta' = dtheta/dn
-    - 3 * self.Prandtl * f[0] * theta[1] # theta'' = - 3 Pr f theta'
+    - 3 * self.prandtl * f[0] * theta[1] # theta'' = - 3 Pr f theta'
   ])
 
 

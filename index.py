@@ -39,6 +39,7 @@ def compute_blasius_edo(title, stop):
   s_1 = 0.1
   s_2 = 0.7
 
+  # SHOOT
   while abs(fprimeguess - fprimeinf) > PRECISION:
     # because f'(b) = 0 (btw, "b" is our way to do eta -> infty ; we take "b" big enough)
     # so we choose f''(0) = s_1 and f''(0) = s_2 
@@ -50,10 +51,11 @@ def compute_blasius_edo(title, stop):
 
     # initial values
     f_init = [0, 0, s] # f(0), f'(0), f''(0)
-    theta_init = [1, s] # theta(0), theta'(0)
+    theta_init = [1, s, 0] # theta(0), theta'(0)
     ci = [f_init, theta_init]
 
-    fluid_flow = RK4Method(blasius_edo, ci, full_time_range, TIME_INTERVAL)
+    edo = [blasius_edo_flow, blasius_edo_heat]
+    fluid_flow = RK4Method(edo, f_init, theta_init, full_time_range, TIME_INTERVAL)
     fluid_flow.resolve()
 
     time = fluid_flow.full_time_range
@@ -62,14 +64,14 @@ def compute_blasius_edo(title, stop):
     # then we choose the next s_1 and s_2
     # adjust our shoot
     print(y_set)
-    if y_set[-1] < ...:
+    if y_set[-1] < fprimeinf:
       s_1 = s
     else: 
       s_2 = s
 
     fprimeguess = y_set[-1]
 
-    #fluid_flow.graph(title, legends, x_label, y_label)
+  fluid_flow.graph(title, legends, x_label, y_label)
 
 compute_blasius_edo(
   title="",
