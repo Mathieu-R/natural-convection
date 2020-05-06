@@ -58,7 +58,7 @@ def shooting(eta_range):
 
   # define our function to optimize
   # our goal is to take big eta because eta should approach infty
-  # [-1, 2] : last row, second column => f'(eta_final) ~ f'(eta -> infty)
+  # [-1, 1] : last row, second column => f'(eta_final) ~ f'(eta -> infty)
   fun = lambda initial_guess: rk4(eta_range, initial_guess)[-1, 1] - fprimeinf
   # newton method resolve the ODE system until eta_final
   # then adjust the shoot and resolve again until we have a correct shoot
