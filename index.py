@@ -6,6 +6,8 @@ f''' = 3ff'' - 2(f')^2 + theta
 3 Pr f theta' + theta'' = 0
 
 RK4 + Shooting Method
+
+CHECK : testes with basic_blasius_edo and compared with Legat graph and it works.
 """
 
 import numpy as np
@@ -20,7 +22,6 @@ from edo_solver.plot import plot
 from constants import PRECISION
 
 def rk4(eta_range, shoot):
-  #print(shoot)
   prandtl = 0.01
 
   # initial values
@@ -28,11 +29,7 @@ def rk4(eta_range, shoot):
   theta_init = [1, shoot] # theta(0), theta'(0)
   ci = f_init + theta_init # concatenate two ci
 
-  #print("trololo")
-  #print(eta_range)
-
   # note: tuple with single argument must have "," at the end of the tuple
-  #print(ci)
   return odeint(func=blasius_edo, y0=ci, t=eta_range, args=(prandtl,))
 
 """
@@ -57,7 +54,7 @@ def shooting(eta_range):
   # as far as I understand
   # it has to be the good guess
   # otherwise the result can be completely wrong
-  initial_guess = 1 # guess for f''(0)
+  initial_guess = 10 # guess for f''(0)
 
   # define our function to optimize
   # our goal is to take big eta because eta should approach infty
@@ -91,5 +88,5 @@ def compute_blasius_edo(title, eta_final):
 
 compute_blasius_edo(
   title="Convection naturelle - Solution de similitude",
-  eta_final=5
+  eta_final=10
 )
