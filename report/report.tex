@@ -1,5 +1,5 @@
 % !TeX root = ./report.tex
-\documentclass{tufte-handout}
+\documentclass[a4paper]{tufte-handout}
 
 % ------ PREAMBLE ------- %
 
@@ -9,10 +9,10 @@
 % book metadata (always in preamble)
 \title{Natural convection \\ \noindent Blasius problem}
 \author{Mathieu Rousseau}
-\publisher{}
+\date{\today}
 
-% turn on numbering for parts and chapters 
-\setcounter{secnumdepth}{1} 
+% turn on numbering for parts and chapters
+\setcounter{secnumdepth}{1}
 
 \usepackage{silence}
 % Filter warnings issued by package biblatex starting with "Patching footnotes failed"
@@ -23,6 +23,9 @@
 
 \usepackage{amsmath, amssymb}
 \usepackage{setspace, enumerate, tikz}
+
+% Non-stacked fractions and better unit spacing
+\usepackage{units}
 
 % typeset system of equations the easy way
 % http://ftp.snt.utwente.nl/pub/software/tex/macros/generic/systeme/systeme_fr.pdf
@@ -38,14 +41,6 @@
 % beautiful tables
 \usepackage{booktabs}
 
-% prints an asterisk that takes up no horizontal space.
-% useful in tabular environments.
-\newcommand{\hangstar}{\makebox[0pt][l]{*}}
-
-% Prints argument within hanging parentheses (i.e., parentheses that take
-% up no horizontal space).  Useful in tabular environments.
-\newcommand{\hangp}[1]{\makebox[0pt][r]{(}#1\makebox[0pt][l]{)}}
-
 % graphics / images
 % \graphicspath{{}} = path of the img folder
 \usepackage{graphicx}
@@ -59,7 +54,7 @@
 % prints a trailing space in a smart way.
 \usepackage{xspace}
 
-% go to line the easy way 
+% go to line the easy way
 \usepackage[parfill]{parskip}
 
 % units
@@ -73,7 +68,7 @@
 \usepackage{framed}
 
 % for theorem, proposition,...
-% set a line break after the label 
+% set a line break after the label
 \usepackage[framed]{ntheorem}
 \theoremstyle{break}
 
@@ -97,6 +92,14 @@
 \newcommand{\R}{\mb{R}}
 \newcommand{\dS}{\cdot d\vec{S}}
 
+% prints an asterisk that takes up no horizontal space.
+% useful in tabular environments.
+\newcommand{\hangstar}{\makebox[0pt][l]{*}}
+
+% Prints argument within hanging parentheses (i.e., parentheses that take
+% up no horizontal space).  Useful in tabular environments.
+\newcommand{\hangp}[1]{\makebox[0pt][r]{(}#1\makebox[0pt][l]{)}}
+
 % ------ DOCUMENT ------%
 
 \begin{document}
@@ -109,7 +112,7 @@
 
 %\mainmatter
 
-\input{"tex/derivation.tex"}
+\input{tex/derivation.tex}
 
 %\printbibliography
 

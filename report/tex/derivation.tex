@@ -9,7 +9,7 @@
   \item $\delta << Y$
 \end{itemize}
 
-\noindent On suppose que l'écoulement n'existe que dans la couche limite ($\delta(x)$). \\ 
+\noindent On suppose que l'écoulement n'existe que dans la couche limite ($\delta(x)$). \\
 Dès lors on peut utiliser \textbf{les équations de Prandtl} en y ajoutant \textbf{le terme lié à la poussée d'Archimède} et en négligeant \textbf{la dissipation visqueuse}.
 
 \noindent Hypothèses de Prandtl
@@ -32,6 +32,23 @@ Dès lors on peut utiliser \textbf{les équations de Prandtl} en y ajoutant \tex
 \begin{itemize}
   \item Nombre de Grasshof : $\frac{(\text{"poussée d'Archimède"})(\text{terme d'inertie})}{(\text{forces visqueuses})^2} = \frac{\beta \Delta T g L^3}{\nu^2}$
 \end{itemize}
+
+% \definecolor{zzttff}{rgb}{0,0.756,0}
+% \begin{figure}[ht!]
+%     \centering
+% \begin{tikzpicture}
+%     \draw[black] (-2,1) -- (2,1);
+%     \draw[black, very thick] (0,-4) -- (0,2);
+%     \draw[line width=2.pt,color=red,smooth,samples=100,domain=0:1.4] plot(\x,{3*(\x)^(2.0)-4});
+%     \draw[zzttff,<->] ( 0,1.05) -- (1.29,1.05);
+%     \draw(0.55,1.3) node [zzttff] {$\delta$};
+%     \draw[zzttff,<->] (-0.06,-4) -- (-0.06,1) ;
+%     \draw(-0.5,-1) node [zzttff] {$L$};
+% \end{tikzpicture}
+%     \caption{Couche limite}
+%     \label{fig:1}
+% \end{figure}
+
 
 \begin{center}
   \begin{tikzpicture}
