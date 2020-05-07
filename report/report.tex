@@ -1,13 +1,15 @@
 % !TeX root = ./report.tex
 \documentclass[a4paper]{tufte-handout}
 
-% ------ PREAMBLE ------- %
+%----------------------------------------------------------------------------------------
+%	PREAMBLE
+%----------------------------------------------------------------------------------------
 
 % colored hyperlink
 \hypersetup{colorlinks}
 
 % book metadata (always in preamble)
-\title{Natural convection \\ \noindent Blasius problem}
+\title{Convection naturelle \\ \noindent Problème de Blasius}
 \author{Mathieu Rousseau}
 \date{\today}
 
@@ -17,9 +19,6 @@
 \usepackage{silence}
 % Filter warnings issued by package biblatex starting with "Patching footnotes failed"
 \WarningFilter{biblatex}{Patching footnotes failed}
-
-%\usepackage[autopunct=false,backend=biber]{biblatex}
-%\addbibresource{navier-stokes.bib} % with extension
 
 \usepackage{amsmath, amssymb}
 \usepackage{setspace, enumerate, tikz}
@@ -46,6 +45,9 @@
 \usepackage{graphicx}
 \setkeys{Gin}{width=\linewidth,totalheight=\textheight,keepaspectratio}
 \graphicspath{{figures/}}
+
+% Default images settings
+\setkeys{Gin}{width=\linewidth, totalheight=\textheight, keepaspectratio}
 
 % to use a slightly smaller font
 \usepackage{fancyvrb}
@@ -87,6 +89,10 @@
 \usepackage{makeidx}
 \makeindex
 
+%----------------------------------------------------------------------------------------
+%	COMMANDS
+%----------------------------------------------------------------------------------------
+
 % commands shortcuts
 \newcommand{\mb}{\mathbb}
 \newcommand{\R}{\mb{R}}
@@ -100,20 +106,29 @@
 % up no horizontal space).  Useful in tabular environments.
 \newcommand{\hangp}[1]{\makebox[0pt][r]{(}#1\makebox[0pt][l]{)}}
 
-% ------ DOCUMENT ------%
+%----------------------------------------------------------------------------------------
+%	DOCUMENT
+%----------------------------------------------------------------------------------------
 
 \begin{document}
 
-%\frontmatter
 \maketitle
 \tableofcontents
 
 \newpage
 
-%\mainmatter
-
 \input{tex/derivation.tex}
 
-%\printbibliography
+%----------------------------------------------------------------------------------------
+%	BIBLIOGRAPHY
+%----------------------------------------------------------------------------------------
+
+% Use \nobibliography{<bib file>}
+% if you have references but don't want to print a bibliography
+% Otherwise, use \bibliography{<bib file>}
+\nobibliography{sample.bib}
+\bibliographystyle{plainnat}
+
+%----------------------------------------------------------------------------------------
 
 \end{document}
