@@ -4,15 +4,49 @@
 
 \begin{itemize}
   \item Le fluide colle à la plaque : $v = 0$ en $x = 0$.
-  \item Le fluide est au repos loins de la plaque : $u = v = 0$.
+  \item Le fluide est au repos loin de la plaque : $u = v = 0$.
   \item Le fluide est plus chaud proche de la plaque: $T_w > T_e$.
   \item $\delta << Y$
 \end{itemize}
 
-\noindent On suppose que l'écoulement n'existe que dans la couche limite ($\delta(x)$). \\
-Dès lors on peut utiliser \textbf{les équations de Prandtl} en y ajoutant \textbf{le terme lié à la poussée d'Archimède} et en négligeant \textbf{la dissipation visqueuse}.
+\begin{marginfigure}
+  \begin{tikzpicture}
+    % plaque chaude
+    \draw[red, thick] (0,0) -- (0,7);
+    \draw (0,0) node[below] {$y=0$};
+    % couche limite
+    \draw[black, thick] (0,0) parabola (1.5,7);
+    % profil de température
+    \draw[red] (-0.5,6.5) node[right] {$T_w$};
+    \draw[red, very thick] (2,5) parabola (0,6.5);
+    \draw[red, very thick] (2,5) -- (3,5);
+    \draw[red] (2.3,5) node[above] {$T_e$};
+    % profil de vitesse
+    %\draw[blue, thick] [yscale=-1, rotate=180] (0,4.5) parabola (0.6,5);
+    %\draw[blue, thick] (1.2,4.5) parabola (0.6,5);
 
-\noindent Hypothèses de Prandtl
+    % \foreach \x in {0.25,0.5,0.75} {
+    %   \pgfmathsetmacro\len{\x * (1 - \x)}
+    %   \draw [->] (2, \x) -- +(3 * \len, 0);
+    % };
+    \draw[gray] (3,2) node[left] {$u = v = 0$};
+    % axes
+    \draw[black,<->] (-0.1,0) -- (-0.1,4.5);
+    \draw[black] (-0.1,2.4) node[left] {$Y$};
+    \draw[black,<->] (0,4.5) -- (1.2,4.5);
+    \draw[black] (0.65,4.5) node[above] {$\delta(y)$};
+  \end{tikzpicture}
+  \caption{Couche limite}
+  \label{fig:couche-limite}
+\end{marginfigure}
+
+\noindent On suppose que l'écoulement n'existe que dans la couche limite ($\delta(x)$).
+
+
+\noindent Dès lors on peut utiliser \textbf{les équations de Prandtl} en y ajoutant \textbf{le terme lié à la poussée d'Archimède} et en négligeant \textbf{la dissipation visqueuse}.
+
+
+\noindent \underline{Hypothèses de Prandtl} :
 
 \begin{itemize}
   \item L'écoulement est à grand nombre de Reynolds.
@@ -33,44 +67,6 @@ Dès lors on peut utiliser \textbf{les équations de Prandtl} en y ajoutant \tex
   \item Nombre de Grasshof : $\frac{(\text{"poussée d'Archimède"})(\text{terme d'inertie})}{(\text{forces visqueuses})^2} = \frac{\beta \Delta T g L^3}{\nu^2}$
 \end{itemize}
 
-% \definecolor{zzttff}{rgb}{0,0.756,0}
-% \begin{figure}[ht!]
-%     \centering
-% \begin{tikzpicture}
-%     \draw[black] (-2,1) -- (2,1);
-%     \draw[black, very thick] (0,-4) -- (0,2);
-%     \draw[line width=2.pt,color=red,smooth,samples=100,domain=0:1.4] plot(\x,{3*(\x)^(2.0)-4});
-%     \draw[zzttff,<->] ( 0,1.05) -- (1.29,1.05);
-%     \draw(0.55,1.3) node [zzttff] {$\delta$};
-%     \draw[zzttff,<->] (-0.06,-4) -- (-0.06,1) ;
-%     \draw(-0.5,-1) node [zzttff] {$L$};
-% \end{tikzpicture}
-%     \caption{Couche limite}
-%     \label{fig:1}
-% \end{figure}
-
-
-\begin{marginfigure}
-  \begin{tikzpicture}
-    % plaque chaude
-    \draw (0,0) -- (0,5) node [below] {$y=0$};
-    % couche limite
-    \draw (0,0) parabola (2,5);
-    % profil de température
-    \node[text=red] (-1,4.5) {$T_w$};
-    \draw[red] (0,4.5) parabola (4,3);
-    \node[text=red] (2,4) {$T_e$};
-    % profil de vitesse
-    \node (-1,2) {$v=0$};
-    \path (0,2) coordinate (p1);
-    \path (2,2) coordinate (p2);
-    \draw[blue] (p1) to [bend left] (p2);
-    \node (3,4) {$u = v = 0$};
-    % axes
-    \draw[<->] (-0.5,0) -- (-0.5,4);
-    \draw[<->] (4.5,0) -- (4.5,3);
-  \end{tikzpicture}
-\end{marginfigure}
 
 On part des équations de Navier-Stokes 2D :
 
@@ -83,7 +79,7 @@ On part des équations de Navier-Stokes 2D :
 
 \newpage
 
-\chapter{\underline{Simplifications :}}
+\chapter{\underline{SIMPLIFICATIONS :}}
 
 On part du principe que la largeur de la couche limite est beaucoup plus petite que la longueur de la plaque.
 Cette simplification va nous permettre de retrouver les équations de Prandtl.
@@ -112,6 +108,15 @@ On prend la première :
 \begin{equation*}
   \rho \left[ \underbrace{u \pdv{u}{x}}_{(1)} + \underbrace{v \pdv{u}{y}}_{(2)} \right] = - \pdv{P}{x} + \mu \left[ \underbrace{\pdv[2]{u}{x}}_{(3)} +  \underbrace{\ccancel{\pdv[2]{u}{y}}{red}}_{(4)} \right]
 \end{equation*}
+
+% Bonne idée pour écrire les ordres des termes
+% \begin{alignat*}{4}
+%   \frac{\partial \mathbf{u}}{\partial t} &{}+{}& \mathbf{u}\cdot \nabla \mathbf{u} &{}={}& -\frac{1}{\rho} \nabla p &{}+{}& \nu \nabla^2 \mathbf{u},\\
+%   \intertext{where again $\nu = \frac{\mu}{\rho}$. We are going to estimate the size of these terms. We get}
+%   \frac{U}{(L/U)} &&U \cdot \frac{U}{L} &&\frac{1}{\rho} \frac{P}{L} &&\nu \frac{U}{L^2}.
+%   \intertext{Dividing by $U^2/L$, we get}
+%   1 && 1 && \frac{P}{\rho U^2} && \frac{\nu}{UL}.
+% \end{alignat*}
 
 \noindent Pour ce qui est des termes d'inertie, le terme $(1)$ est de l'ordre $\frac{U^2}{\delta} = \frac{V^2}{Y^2}\delta$ et le terme $(2)$ est de l'ordre $\frac{VU}{Y} = \frac{V^2}{Y^2}\delta$ \\
 \noindent Pour ce qui est des termes visqueux, le terme $(3)$ est de l'ordre $\frac{U}{\delta^2}$ et le terme $(4)$ est de l'ordre $\frac{U}{Y^2}$.
@@ -163,7 +168,6 @@ On trouve donc que l'hypothèse $\delta << Y$ est satisfaite pour un grand nombr
 
 Pour ce qui est de la pression, on peut faire un développement de Taylor afin de connaitre la pression dans la zone de la couche laminaire.
 
-
 Pression dans la couche laminaire $x \sim \mathcal{O}(\delta)$ :
 
 \begin{equation*}
@@ -183,14 +187,62 @@ On observe que :
 \noindent Par conséquent, la pression est constante sur une tranche \underline{horizontale} : $P(y)$ \\
 \noindent $\pdv{P}{x}$ étant négligeable, on peut supprimer l'équation contenant ce terme.
 
+\newpage
 
 \underline{On obtient les équations de Prandtl} :
 
 \begin{align*}
   %\boxed{
     \pdv{u}{x} + \pdv{v}{y} &= 0 \\
-    \left[ u \pdv{v}{x} + v \pdv{v}{y} \right] &= - \frac{1}{\rho} \dv{P}{y} + \nu \left[ \pdv[2]{v}{x} \right]
+    \rho \left[ u \pdv{v}{x} + v \pdv{v}{y} \right] &= - \dv{P}{y} + \mu \pdv[2]{v}{x}
   %}
 \end{align*}
 
+\chapter{APPROXIMATION DE BOUSSINESQ}
 
+\noindent Puisqu'on est dans le cas de la convection naturelle, on ajoute le terme d'Archimède et la force à distance ($\rho g$). \\
+\noindent Dans le cas de la convection naturelle, le fluide près de la paroi s'élève sous l'effet de la chaleur. \\
+\noindent On considère également que le fluide est soumis à la force d'Archimède c'est à dire que la pression exercée sur ce dernier ne dépend que de la profondeur.
+
+\begin{equation}
+  \systeme{
+    \rho \approx \rho_0(1 - \underbrace{\beta(T - T_e)}_{<< 1}),
+    P(y) = \rho_0 g y \implies dv{P}{y} = \rho_0 g
+  }
+\end{equation}
+
+\noindent On peut simplifier les équations de Prandtl :
+
+\begin{align*}
+  %\boxed{
+    \pdv{u}{x} + \pdv{v}{y} &= 0 \\
+    \rho_0(1 - \underbrace{\ccancel{\beta(T - T_e)}{red}}_{<< 1}) \left[ u \pdv{v}{x} + v \pdv{v}{y} \right] &= \ccancel{- \rho_0 g}{blue} + \mu \pdv[2]{v}{x} + \rho_0(\ccancel{1}{blue} - \beta(T - T_e)g)
+  %}
+\end{align*}
+
+\noindent On obtient enfin les équations de Prandtl pour la convection naturelle :
+
+\begin{align*}
+  %\boxed{
+    \pdv{u}{x} + \pdv{v}{y} &= 0 \\
+    u \pdv{v}{x} + v \pdv{v}{y} &= \beta(T - T_e)g + \nu \pdv[2]{v}{x}
+  %}
+\end{align*}
+
+\chapter{FONCTION DE COURANT ET VARIABLE DE SIMILITUDE}
+
+\noindent On peut exprimer les composantes de la vitesse $u$ et $v$ en terme d'une fonction de courant $\psi(x,y)$:
+
+\begin{equation}
+  \begin{array}{rl}
+    u = \pdv{\psi}{y} \qquad ;& \quad v = - \pdv{\psi}{x}
+  \end{array}
+\end{equation}
+
+\noindent La fonction de courant peut s'écrire de la manière suivante \textit{(cf. proposé dans le TP8)} :
+
+\begin{equation}
+  \psi(x,y) = - 4 \nu f(\eta) \left[ \frac{1}{4} Gr(y) \right]^{1/4} \qq{\textit{(ansatz)}}
+\end{equation}
+
+\noindent Maintenant, grand moment de fun (piloulou, piyou-piyou), on doit calculer un tas de dérivées :
