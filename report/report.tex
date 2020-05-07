@@ -9,7 +9,7 @@
 \hypersetup{colorlinks}
 
 % book metadata (always in preamble)
-\title{Convection naturelle \\ \noindent Problème de Blasius}
+\title{Convection naturelle: problème de Blasius}
 \author{Mathieu Rousseau}
 \date{\today}
 
@@ -69,6 +69,14 @@
 % box around text
 \usepackage{framed}
 
+% cancel terms in equation
+\usepackage[thicklines]{cancel}
+
+\usepackage{color}
+
+\definecolor{blue}{rgb}{0,0,1}
+\definecolor{red}{rgb}{1,0,0}
+
 % for theorem, proposition,...
 % set a line break after the label
 \usepackage[framed]{ntheorem}
@@ -105,6 +113,9 @@
 % Prints argument within hanging parentheses (i.e., parentheses that take
 % up no horizontal space).  Useful in tabular environments.
 \newcommand{\hangp}[1]{\makebox[0pt][r]{(}#1\makebox[0pt][l]{)}}
+
+% cancel terms with color
+\newcommand{\ccancel}[2]{\renewcommand{\CancelColor}{\color{#2}}\bcancel{#1}}
 
 %----------------------------------------------------------------------------------------
 %	DOCUMENT

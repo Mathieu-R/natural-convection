@@ -50,33 +50,147 @@ Dès lors on peut utiliser \textbf{les équations de Prandtl} en y ajoutant \tex
 % \end{figure}
 
 
-\begin{center}
+\begin{marginfigure}
   \begin{tikzpicture}
     % plaque chaude
-    \draw (0,0) -- (0,5); node [below] {$y=0$}
+    \draw (0,0) -- (0,5) node [below] {$y=0$};
     % couche limite
-    \draw (0,0) parabola (2, 5);
+    \draw (0,0) parabola (2,5);
     % profil de température
-    \node[text=red] (-1,4.5) {$T_w$}
+    \node[text=red] (-1,4.5) {$T_w$};
     \draw[red] (0,4.5) parabola (4,3);
-    \node[text=red] (2,4) {$T_e$}
+    \node[text=red] (2,4) {$T_e$};
     % profil de vitesse
-    \draw (-1,2) {v=0}
-    \path (0,2) coordinate (p1)
-    \path (2,2) coordinate (p2)
-    \draw[blue] (p1) to [bend] (p2)
-    \node (3,4) {$u = v = 0$}
+    \node (-1,2) {$v=0$};
+    \path (0,2) coordinate (p1);
+    \path (2,2) coordinate (p2);
+    \draw[blue] (p1) to [bend left] (p2);
+    \node (3,4) {$u = v = 0$};
     % axes
-    \draw (-0.5, 0) <-Y-> (-0.5,4)
-    \draw (4.5, 0) <-$\delta(y)$-> (4.5,3)
+    \draw[<->] (-0.5,0) -- (-0.5,4);
+    \draw[<->] (4.5,0) -- (4.5,3);
   \end{tikzpicture}
-\end{center}
+\end{marginfigure}
 
 On part des équations de Navier-Stokes 2D :
 
 \begin{align}
   \pdv{u}{x} + \pdv{v}{y} &= 0 \qq{(\textit{fluide incompressible})} \\
   \rho \left[ u \pdv{u}{x} + v \pdv{u}{y} \right] &= - \pdv{P}{x} + \mu \left[ \pdv[2]{u}{x} + \pdv[2]{u}{y} \right] \qq{(\textit{fluid flow})} \\
-  \rho \left[ v \pdv{u}{x} + v \pdv{v}{y} \right] &= - \pdv{P}{y} + \mu \left[ \pdv[2]{u}{x} + \pdv[2]{u}{y} \right] \qq{(\textit{fluid flow})} \\
+  \rho \left[ u \pdv{v}{x} + v \pdv{v}{y} \right] &= - \pdv{P}{y} + \mu \left[ \pdv[2]{v}{x} + \pdv[2]{v}{y} \right] \qq{(\textit{fluid flow})} \\
   u \pdv{T}{x} + v \pdv{T}{y} &= \alpha \left[\pdv[2]{T}{x} + \pdv[2]{T}{y} \right] \qq{(heat flow)}
 \end{align}
+
+\newpage
+
+\chapter{\underline{Simplifications :}}
+
+On part du principe que la largeur de la couche limite est beaucoup plus petite que la longueur de la plaque.
+Cette simplification va nous permettre de retrouver les équations de Prandtl.
+
+\begin{equation}
+  \boxed{\delta << Y}
+\end{equation}
+
+On commence par l'équation décrivant l'écoulement incompressible, on peut comparer ses 2 termes d'inerties :
+
+\begin{align*}
+  \underbrace{\pdv{u}{x}}_{\mathcal{O}(\frac{U}{\delta})} + \underbrace{\pdv{v}{y}}_{\mathcal{O}(\frac{V}{Y})} = 0
+\end{align*}
+
+Par conséquent on trouve un relation importante :
+
+\begin{equation}
+  \boxed{U = V \frac{\delta}{Y} << V}
+\end{equation}
+
+On continue ensuite avec les 2 équations du bilan de la quantité de mouvement.
+\noindent La couche laminaire est le lieu où les \textit{termes d'inerties} sont du même ordre que les \textit{termes visqueux}, on peut donc les comparer.
+
+On prend la première :
+
+\begin{equation*}
+  \rho \left[ \underbrace{u \pdv{u}{x}}_{(1)} + \underbrace{v \pdv{u}{y}}_{(2)} \right] = - \pdv{P}{x} + \mu \left[ \underbrace{\pdv[2]{u}{x}}_{(3)} +  \underbrace{\ccancel{\pdv[2]{u}{y}}{red}}_{(4)} \right]
+\end{equation*}
+
+\noindent Pour ce qui est des termes d'inertie, le terme $(1)$ est de l'ordre $\frac{U^2}{\delta} = \frac{V^2}{Y^2}\delta$ et le terme $(2)$ est de l'ordre $\frac{VU}{Y} = \frac{V^2}{Y^2}\delta$ \\
+\noindent Pour ce qui est des termes visqueux, le terme $(3)$ est de l'ordre $\frac{U}{\delta^2}$ et le terme $(4)$ est de l'ordre $\frac{U}{Y^2}$.
+
+On observe donc que :
+
+\begin{equation*}
+  \boxed{\frac{U}{\delta^2} >> \frac{U}{Y^2} \qq{\textit{le terme $(4)$ est négligeable}}}
+\end{equation*}
+
+On peut effectuer un raisonnement similaire avec la seconde équation :
+
+\begin{equation*}
+  \rho \left[ \underbrace{u \pdv{v}{x}}_{(1)} + \underbrace{v \pdv{v}{y}}_{(2)} \right] = - \pdv{P}{y} + \mu \left[ \underbrace{\pdv[2]{v}{x}}_{(3)} + \underbrace{\ccancel{\pdv[2]{v}{y}}{red}}_{(4)} \right]
+\end{equation*}
+
+% Comparer les termes d'inerties et visqueux. Mettre les ordres "inline" dans le texte ne semble pas très joli.
+\noindent Les termes d'inerties sont de l'ordre :
+
+\begin{equation*}
+  \systeme{
+    u \pdv{v}{x} \approx \mathcal{O}(\frac{UV}{\delta}) = \mathcal{O}(\frac{V^2}{Y}),
+    v \pdv{u}{y} \approx \mathcal{O}(\frac{V^2}{Y})
+  }
+\end{equation*}
+
+\noindent Les termes visqueux sont de l'ordre :
+
+\begin{equation*}
+  \systeme{
+    \pdv[2]{v}{x} \approx \mathcal{O}(\frac{V}{\delta^2}),
+    \pdv[2]{v}{y} \approx \mathcal{O}(\frac{V}{Y^2})
+  }
+  \implies \frac{V}{\delta^2} >> \frac{V}{Y^2}
+\end{equation*}
+
+On peut trouver une autre condition importante à la validité des équations de Prandtl. \\
+\noindent Puisque les \textit{termes d'inerties} sont du même ordre que les \textit{termes visqueux}, on peut écrire :
+
+\begin{equation*}
+  \rho \frac{V^2}{Y} = \mu \frac{V}{\delta^2} \implies \frac{\delta^2}{Y^2} = \frac{\mu}{V \rho Y} = \frac{1}{Re_y}
+\end{equation*}
+
+On trouve donc que l'hypothèse $\delta << Y$ est satisfaite pour un grand nombre de Reynolds :
+
+\begin{equation}
+  \boxed{\frac{\delta}{Y} = \frac{1}{\sqrt{Re_y}}}
+\end{equation}
+
+Pour ce qui est de la pression, on peut faire un développement de Taylor afin de connaitre la pression dans la zone de la couche laminaire.
+
+
+Pression dans la couche laminaire $x \sim \mathcal{O}(\delta)$ :
+
+\begin{equation*}
+  \boxed{P(x,y) - P_0 \approx P(\delta, y) - P_0 + \ccancel{\pdv{P(x,y)}{x} \biggr\rvert_{x=0} (x - \delta)}{red} + ...}
+\end{equation*}
+
+On observe que :
+
+\begin{equation*}
+  P(\delta, y) - P_0 = y \pdv{P}{y} \approx \mathcal{O}(Y) \mathcal{O}(\frac{\rho V^2}{Y}) = \mathcal{O}(\rho V^2)
+\end{equation*}
+
+\begin{equation*}
+  \pdv{P(x,y)}{x} (x - \delta) \approx \mathcal{O}(\frac{\rho U V}{Y}) \mathcal{O}(\delta) = \mathcal{O}(\rho V^2 \frac{\delta^2}{Y^2})
+\end{equation*}
+
+\noindent Par conséquent, la pression est constante sur une tranche \underline{horizontale} : $P(y)$ \\
+\noindent $\pdv{P}{x}$ étant négligeable, on peut supprimer l'équation contenant ce terme.
+
+
+\underline{On obtient les équations de Prandtl} :
+
+\begin{align*}
+  %\boxed{
+    \pdv{u}{x} + \pdv{v}{y} &= 0 \\
+    \left[ u \pdv{v}{x} + v \pdv{v}{y} \right] &= - \frac{1}{\rho} \dv{P}{y} + \nu \left[ \pdv[2]{v}{x} \right]
+  %}
+\end{align*}
+
+
