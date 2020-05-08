@@ -85,6 +85,7 @@ def shooting(eta_range):
   y = rk4(eta_range, shoot_flow, shoot_heat)
   return y
 
+# https://www.math.ubc.ca/~pwalls/math-python/roots-optimization/bisection/
 def bisection(eta_range):
   # we choose a starting interval [a0, b0]
   # such that f(a0)*f(b0) < 0
