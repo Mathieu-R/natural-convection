@@ -21,12 +21,12 @@ from edo_solver.plot import plot
 
 from constants import PRECISION
 
-def rk4(eta_range, shoot):
+def rk4(eta_range, shoot_f, shoot_theta):
   prandtl = 0.01
 
   # initial values
-  f_init = [0, 0, shoot] # f(0), f'(0), f''(0)
-  theta_init = [1, shoot] # theta(0), theta'(0)
+  f_init = [0, 0, shoot_f] # f(0), f'(0), f''(0)
+  theta_init = [1, shoot_theta] # theta(0), theta'(0)
   ci = f_init + theta_init # concatenate two ci
 
   # note: tuple with single argument must have "," at the end of the tuple
@@ -45,27 +45,37 @@ is also the solution the boundary problem with f'(eta -> infty) = fprime_inf
 
 our goal is to find the root, we have the root...we have the solution.
 it can be done with bissection method or newton method.
+
+NOTE :  we have two boundary values for the 2 coupled ODE.
+        I guess we should manage these two in parallel.
 """
 def shooting(eta_range):
-  # boundary value
+  # boundary values
   fprimeinf = 0 # f'(eta -> infty) = 0
+  thetainf = 0 # theta(eta -> infty) = 0
 
   # initial guess
   # as far as I understand
   # it has to be the good guess
   # otherwise the result can be completely wrong
-  initial_guess = 10 # guess for f''(0)
+  f_initial_guess = 10 # guess for f''(0)
+  theta_initial_guess = 100 # guess for theta'(0)
 
   # define our function to optimize
   # our goal is to take big eta because eta should approach infty
   # [-1, 1] : last row, second column => f'(eta_final) ~ f'(eta -> infty)
-  fun = lambda initial_guess: rk4(eta_range, initial_guess)[-1, 1] - fprimeinf
+  # [-1, 3] : last row, fourth column => theta(eta_final) ~ theta(eta -> infty)
+  fun_f = lambda initial_guess: rk4(eta_range, initial_guess, theta_initial_guess)[-1, 1] - fprimeinf
+  fun_theta = lambda initial_guess: rk4(eta_range, f_initial_guess, initial_guess)[-1, 3] - thetainf
   # newton method resolve the ODE system until eta_final
   # then adjust the shoot and resolve again until we have a correct shoot
-  shoot = newton(func=fun, x0=initial_guess)
+  shoot_f = newton(func=fun_f, x0=f_initial_guess)
+  shoot_theta = newton(func=fun_theta, x0=theta_initial_guess)
+
+  print(shoot_f, shoot_theta)
 
   # resolve our system of ODE with the good "a"
-  y = rk4(eta_range, shoot)
+  y = rk4(eta_range, shoot_f, shoot_theta)
   return y
 
 def compute_blasius_edo(title, eta_final):
