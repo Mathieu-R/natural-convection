@@ -59,6 +59,9 @@
 % go to line the easy way
 \usepackage[parfill]{parskip}
 
+% usefull for conditions* environment
+\usepackage{tabularx}
+
 % units
 \usepackage{siunitx}
 \sisetup{locale = FR}
@@ -92,6 +95,11 @@
 \newenvironment{conditions}
   {\par\vspace{\abovedisplayskip}\noindent\begin{tabular}{>{$}l<{$} @{${}={}$} l}}
   {\end{tabular}\par\vspace{\belowdisplayskip}}
+
+\newenvironment{conditions*}
+  {\par\vspace{\abovedisplayskip}\noindent
+   \tabularx{\columnwidth}{>{$}l<{$} @{${}={}$} >{\raggedright\arraybackslash}X}}
+  {\endtabularx\par\vspace{\belowdisplayskip}}
 
 % generates an index
 \usepackage{makeidx}

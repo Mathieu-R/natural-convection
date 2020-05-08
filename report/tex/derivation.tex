@@ -245,4 +245,48 @@ On observe que :
   \psi(x,y) = - 4 \nu f(\eta) \left[ \frac{1}{4} Gr(y) \right]^{1/4} \qq{\textit{(ansatz)}}
 \end{equation}
 
-\noindent Maintenant, grand moment de fun (piloulou, piyou-piyou), on doit calculer un tas de dérivées :
+\noindent L'énoncé nous propose la variable de similitude suivante :
+
+\begin{equation}
+  \eta(x,y) = \frac{x}{\delta(y)} = \frac{x}{y}\left( \frac{Gr(y)}{4} \right)^{1/4}
+\end{equation}
+
+où :
+\begin{conditions*}
+  Gr & Nombre de Grashof,
+       caractérise le transfert thermique
+       dû à la convection naturelle d'un fluide.
+\end{conditions*}
+
+Nous pouvons introduire la température adimensionnelle :
+
+\begin{equation}
+  \boxed{\theta(\eta) = \frac{T - T_e}{T_w - T_e} = \frac{T - T_e}{\Delta T}}
+\end{equation}
+
+Par conséquent :
+
+\begin{equation}
+  \beta(T - T_e)g = \beta \theta(\eta) \Delta T g = \theta(\eta) Gr(y) \frac{\nu^2}{y^3}
+\end{equation}
+
+On notera que :
+
+\begin{align}
+  Gr(y) &= \frac{\beta \Delta T g y^3}{\nu^2} \\
+  Gr'(y) &=  \frac{3 \beta \Delta T g y^2}{\nu^2} = \frac{3}{y} Gr(y) \\
+  \delta(y) &= y \left( \frac{Gr(y)}{4} \right)^{1/4} \\
+  \delta'(y) &=  \left( \frac{4}{Gr(y)} \right)^{1/4}  - y \frac{1}{4} \left( \frac{4}{Gr(y)}\right)^{-3/4} \left( \frac{4}{Gr^2} \right) \frac{3}{y} Gr(y) \\
+  \frac{1}{\delta^2} &= \frac{1}{2y^2} \sqrt{Gr(y)}
+\end{align}
+
+\noindent Maintenant, grand moment de fun (piloulou, piyou-piyou), on doit calculer un tas de dérivées. \\
+\noindent On commence par calculer quelques dérivées qui nous seront utiles par la suite :
+
+\begin{align}
+  \pdv{\eta}{x} &= \frac{1}{\delta(y)} \\
+  \pdv{\eta}{y} &= - \eta \frac{\delta'(y)}{\delta(y)} \\
+  u &= \pdv{\psi}{y} = 4 \nu f' \frac{1}{4} \left[ \frac{Gr}{4} \right]^{1/4} \eta \frac{\delta'(y)}{\delta(y)} \\
+  \pdv{v}{x} &= - \pdv[2]{\psi}{x} = - 4 \nu \left[ \frac{Gr}{4} \right]^{1/4} f'' \frac{1}{\delta(y)^2} \\
+  v &= - \pdv{\psi}{x} = -4 \nu \left[ \frac{Gr}{4} \right]^{1/4} f' \frac{1}{\delta(y)}
+\end{align}
