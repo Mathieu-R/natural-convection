@@ -22,19 +22,23 @@ def secant(fun, a0, b0, iterations=100):
 
   # fafb should be negative to ensure a root exists
   # we fix a maximal interval length
-  while (fafb >= 0) and (abs(b - a) <= 100):
+  while (fafb >= 0) and (abs(b - a) <= 10):
     # increase interval of a step delta
     b += delta
-    fa = fun(a)
-    fb = fun(b)
-    fafb = fa*fb
-
-  while (fafb >= 0) and (abs(b - a) <= 100):
-    # increase interval of a step delta
     a -= delta
     fa = fun(a)
     fb = fun(b)
+    # print(f"==> a: {a} ; b: {b}")
+    # print(f"==> f(a): {fa} ; f(b): {fb}")
+    # print(f"==> f(a): {fun(a)} ; f(b): {fun(b)}")
     fafb = fa*fb
+
+  # while (fafb >= 0) and (abs(b - a) <= 100):
+  #   # increase interval of a step delta
+  #   a -= delta
+  #   fa = fun(a)
+  #   fb = fun(b)
+  #   fafb = fa*fb
 
   # if we couldn't find an interval s.t fa*fb < 0
   # stop here...

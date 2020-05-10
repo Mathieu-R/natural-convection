@@ -30,7 +30,6 @@ theta(0) = 1
 theta(eta -> infty) = 0
 """
 def blasius_edo(t, y, prandtl):
-  #print(y)
   f = y[0:3]
   theta = y[3:5]
   return np.array([

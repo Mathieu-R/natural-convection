@@ -22,6 +22,9 @@ from edo_solver.plot import plot
 
 from constants import PRECISION
 
+# Well, well, well
+# seems that too many evaluations lead to bug
+# odeint would send back the same value for different shoot of theta
 def rk4(eta_range, shoot_f, shoot_theta):
   prandtl = 0.01
 
@@ -31,7 +34,10 @@ def rk4(eta_range, shoot_f, shoot_theta):
   ci = f_init + theta_init # concatenate two ci
 
   # note: tuple with single argument must have "," at the end of the tuple
-  return odeint(func=blasius_edo, y0=ci, t=eta_range, args=(prandtl,), tfirst=True)
+  integration = odeint(func=blasius_edo, y0=ci, t=eta_range, args=(prandtl,), tfirst=True)
+  #print(f"shoot_f: {shoot_f}, shoot_theta: {shoot_theta}, theta(infty) : {integration[-1, 3]}")
+  #print(integration[-1, 0])
+  return integration
 
 """
 if we have :
@@ -67,18 +73,14 @@ def shooting(eta_range):
   shoot_flow = secant(fun=fun_f, a0=f_initial_guess, b0=0)
   shoot_heat = secant(fun=fun_theta, a0=theta_initial_guess, b0=0)
 
-  if shoot_heat is None:
-    return
-
-  #print(shoot_flow, shoot_heat)
-
   # resolve our system of ODE with the good "a"
-  y = rk4(eta_range, shoot_flow, shoot_flow)
+  y = rk4(eta_range, shoot_flow, shoot_heat)
+  print(y[-1, :])
   return y
 
 def compute_blasius_edo(title, eta_final):
   ETA_0 = 0
-  ETA_INTERVAL = 0.01
+  ETA_INTERVAL = 0.1
   ETA_FINAL = eta_final
 
   # default values
