@@ -12,12 +12,13 @@ CHECK : testes with basic_blasius_edo and compared with Legat graph and it works
 
 import numpy as np
 
-from scipy.integrate import odeint
+from scipy.integrate import odeint, solve_ivp
 from scipy.optimize import newton, brentq
 
 from decimal import Decimal
 from edo_solver.edo import basic_blasius_edo, blasius_edo
 from edo_solver.optimize import secant
+from edo_solver.integrate import solve_rk4
 from edo_solver.plot import plot
 
 from constants import PRECISION
@@ -34,9 +35,9 @@ def rk4(eta_range, shoot_f, shoot_theta):
   ci = f_init + theta_init # concatenate two ci
 
   # note: tuple with single argument must have "," at the end of the tuple
-  integration = odeint(func=blasius_edo, y0=ci, t=eta_range, args=(prandtl,), tfirst=True)
-  #print(f"shoot_f: {shoot_f}, shoot_theta: {shoot_theta}, theta(infty) : {integration[-1, 3]}")
-  #print(integration[-1, 0])
+  integration = odeint(func=blasius_edo, y0=ci, t=eta_range, args=(prandtl,), tfirst=True, full_output=0)
+  #integration = solve_ivp(fun=blasius_edo, t_span=(0, 100), y0=ci, method='RK45', args=(prandtl,))
+  #solve_rk4(func=blasius_edo, y0=ci, t=eta_range, args=(prandtl,))
   return integration
 
 """
@@ -59,23 +60,21 @@ def shooting(eta_range):
   thetainf = 0 # theta(eta -> infty) = 0
 
   # initial guess
-  f_initial_guess = -0.07 # guess for f''(0)
-  theta_initial_guess = -0.03 # guess for theta'(0)
+  f_initial_guess = 0.985 # guess for f''(0)
+  theta_initial_guess = -0.0815 # guess for theta'(0)
 
   # define our function to optimize
   # our goal is to take big eta because eta should approach infty
   # [-1, 1] : last row, second column => f'(eta_final) ~ f'(eta -> infty)
   # [-1, 3] : last row, fourth column => theta(eta_final) ~ theta(eta -> infty)
   fun_f = lambda initial_guess: rk4(eta_range, initial_guess, theta_initial_guess)[-1, 1] - fprimeinf
-  fun_theta = lambda initial_guess: rk4(eta_range, f_initial_guess, initial_guess)[-1, 3] - thetainf
-  # newton method resolve the ODE system until eta_final
-  # then adjust the shoot and resolve again until we have a correct shoot
-  shoot_flow = secant(fun=fun_f, a0=f_initial_guess, b0=0)
-  shoot_heat = secant(fun=fun_theta, a0=theta_initial_guess, b0=0)
+  shoot_flow = secant(fun=fun_f, a0=f_initial_guess, b0=0.99)
+
+  fun_theta = lambda initial_guess: rk4(eta_range, f_initial_guess, initial_guess)[-1, 2] - thetainf
+  shoot_heat = secant(fun=fun_theta, a0=theta_initial_guess, b0=-0.08)
 
   # resolve our system of ODE with the good "a"
   y = rk4(eta_range, shoot_flow, shoot_heat)
-  print(y[-1, :])
   return y
 
 def compute_blasius_edo(title, eta_final):
@@ -96,7 +95,30 @@ def compute_blasius_edo(title, eta_final):
 
   plot(eta_range, y_set, title, legends, x_label, y_label)
 
+def test_blasius_edo(title, eta_final):
+  ETA_0 = 0
+  ETA_INTERVAL = 0.1
+  ETA_FINAL = eta_final
+
+  # default values
+  title = title
+  x_label = "$\eta$"
+  y_label = "profil de vitesse $(f'(\eta))$ / profil de température $(\\theta)$"
+  legends = ["$f'(\eta)$", "$\\theta$"]
+
+  eta_range = np.arange(ETA_0, ETA_FINAL + ETA_INTERVAL, ETA_INTERVAL)
+
+  # shoot
+  y_set = rk4(eta_range, 0.9855555, -0.0815555)
+
+  plot(eta_range, y_set, title, legends, x_label, y_label)
+
 compute_blasius_edo(
-  title="Convection naturelle - Solution de similitude",
-  eta_final=10
+ title="Convection naturelle - Solution de similitude",
+ eta_final=20
+)
+
+test_blasius_edo(
+  title="Test",
+  eta_final=50
 )

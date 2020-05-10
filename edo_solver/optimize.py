@@ -6,8 +6,8 @@ from constants import PRECISION
   a0, b0: starting interval
   iterations: number of iterations
 """
-def secant(fun, a0, b0, iterations=100):
-  delta = 0.05
+def secant(fun, a0, b0, iterations=1000):
+  delta = 0.0001
 
   a = a0
   b = b0
