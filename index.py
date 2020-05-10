@@ -17,6 +17,7 @@ from scipy.optimize import newton, brentq
 
 from decimal import Decimal
 from edo_solver.edo import basic_blasius_edo, blasius_edo
+from edo_solver.optimize import secant
 from edo_solver.plot import plot
 
 from constants import PRECISION
@@ -31,6 +32,46 @@ def rk4(eta_range, shoot_f, shoot_theta):
 
   # note: tuple with single argument must have "," at the end of the tuple
   return odeint(func=blasius_edo, y0=ci, t=eta_range, args=(prandtl,), tfirst=True)
+
+"""
+if we have :
+f'(t_0) = fprime_t0 ; f'(eta -> infty) = fprime_inf
+we can transform it into :
+f'(t_0) = fprime_t0 ; f''(t_0) = a
+we define the function F(a) = f'(infty ; a) - fprime_inf
+if F(a) has a root in "a",
+then the solutions to the initial value problem with f''(t_0) = a
+is also the solution the boundary problem with f'(eta -> infty) = fprime_inf
+our goal is to find the root, we have the root...we have the solution.
+it can be done with bissection method or newton method.
+NOTE :  we have two boundary values for the 2 coupled ODE.
+        I guess we should manage these two in parallel.
+"""
+def shooting(eta_range):
+  # boundary values
+  fprimeinf = 0 # f'(eta -> infty) = 0
+  thetainf = 0 # theta(eta -> infty) = 0
+
+  # initial guess
+  f_initial_guess = -0.07 # guess for f''(0)
+  theta_initial_guess = -0.07 # guess for theta'(0)
+
+  # define our function to optimize
+  # our goal is to take big eta because eta should approach infty
+  # [-1, 1] : last row, second column => f'(eta_final) ~ f'(eta -> infty)
+  # [-1, 3] : last row, fourth column => theta(eta_final) ~ theta(eta -> infty)
+  fun_f = lambda initial_guess: rk4(eta_range, initial_guess, theta_initial_guess)[-1, 1] - fprimeinf
+  fun_theta = lambda initial_guess: rk4(eta_range, f_initial_guess, initial_guess)[-1, 3] - thetainf
+  # newton method resolve the ODE system until eta_final
+  # then adjust the shoot and resolve again until we have a correct shoot
+  shoot_flow = secant(fun=fun_f, a0=f_initial_guess, b0=0)
+  shoot_heat = secant(fun=fun_theta, a0=theta_initial_guess, b0=0)
+
+  #print(shoot_flow, shoot_heat)
+
+  # resolve our system of ODE with the good "a"
+  #y = rk4(eta_range, shoot_flow, shoot_heat)
+  return y
 
 def compute_blasius_edo(title, eta_final):
   ETA_0 = 0
