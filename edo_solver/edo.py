@@ -4,7 +4,7 @@ import math
 """
   f''' + ff'' = 0
 """
-def basic_blasius_edo(f, t):
+def basic_blasius_edo(t, f):
   return np.array([
     f[1],
     f[2],
@@ -29,7 +29,8 @@ f'(eta -> infty) = 0
 theta(0) = 1
 theta(eta -> infty) = 0
 """
-def blasius_edo(y, t, prandtl):
+def blasius_edo(t, y, prandtl):
+  #print(y)
   f = y[0:3]
   theta = y[3:5]
   return np.array([
