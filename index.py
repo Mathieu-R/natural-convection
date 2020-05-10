@@ -54,7 +54,7 @@ def shooting(eta_range):
 
   # initial guess
   f_initial_guess = -0.07 # guess for f''(0)
-  theta_initial_guess = -0.07 # guess for theta'(0)
+  theta_initial_guess = -0.03 # guess for theta'(0)
 
   # define our function to optimize
   # our goal is to take big eta because eta should approach infty
@@ -67,10 +67,13 @@ def shooting(eta_range):
   shoot_flow = secant(fun=fun_f, a0=f_initial_guess, b0=0)
   shoot_heat = secant(fun=fun_theta, a0=theta_initial_guess, b0=0)
 
+  if shoot_heat is None:
+    return
+
   #print(shoot_flow, shoot_heat)
 
   # resolve our system of ODE with the good "a"
-  #y = rk4(eta_range, shoot_flow, shoot_heat)
+  y = rk4(eta_range, shoot_flow, shoot_flow)
   return y
 
 def compute_blasius_edo(title, eta_final):

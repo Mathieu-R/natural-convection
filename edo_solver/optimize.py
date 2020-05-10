@@ -17,13 +17,21 @@ def secant(fun, a0, b0, iterations=100):
 
   fafb = fa * fb
 
+  print(f"===========================")
+  print(f"==> f(a): {fa} ; f(b): {fb}")
+
   # fafb should be negative to ensure a root exists
   # we fix a maximal interval length
-  while (fafb >= 0) and (abs(b - a) <= 200):
-    #print(fb)
-    #print("fafb >= 0, looking for root...")
+  while (fafb >= 0) and (abs(b - a) <= 100):
     # increase interval of a step delta
     b += delta
+    fa = fun(a)
+    fb = fun(b)
+    fafb = fa*fb
+
+  while (fafb >= 0) and (abs(b - a) <= 100):
+    # increase interval of a step delta
+    a -= delta
     fa = fun(a)
     fb = fun(b)
     fafb = fa*fb
@@ -32,8 +40,11 @@ def secant(fun, a0, b0, iterations=100):
   # stop here...
   if (fafb >= 0):
     print(f"This function has no root on the interval (overevaluated) [{a}, {b}]...")
+    print(f"==> f(a): {fa} ; f(b): {fb}")
+    return
 
   print("root exist")
+  print(f"==> f(a): {fa} ; f(b): {fb}")
 
   for i in range(1,iterations):
     # compute secant line
@@ -57,11 +68,14 @@ def secant(fun, a0, b0, iterations=100):
 
     elif fx == 0:
       print("Exact solution found.")
+      print(f"root is exactly at eta={x}")
       return x
 
     # stop when our interval has reached some
     # predetermined length
     if (abs(a - b) <= PRECISION):
+      print(f"root is approximately at eta={x}")
       return x
 
+  print(f"root is approximately at eta={x}")
   return x
