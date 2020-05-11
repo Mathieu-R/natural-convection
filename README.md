@@ -1,8 +1,6 @@
 # natural-convection
-Project for fluid mechanic course about natural convection.     
-
-- [ ] Derive the similitude equations for natural convection from Navier-Stokes equations.    
-- [X] Resolve numerically these equations.    
+- [X] Derive the similitude equations for natural convection from Navier-Stokes equations.    
+- [ ] Resolve numerically these equations.    
 
 ### numerical resolutions
 We use Runge-Kutta 4 and the Shooting method (which use itself Newton method to find the root)
