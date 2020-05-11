@@ -26,3 +26,9 @@ $ ./easy_launch.sh
 ```
 $ pip3 install prompt_toolkit==1.0.14
 ```
+
+### documentation
+
+Shooting method : https://kyleniemeyer.github.io/ME373-book/bvps/shooting-method.html     
+Flat Plate : https://nbviewer.jupyter.org/github/Jpescudero/Laminar-Thermal-Flat-Plate/blob/master/Flat_Plate_Notebook.html    
+Similiarity solution for boundary layer : https://www.sciencedirect.com/science/article/pii/S2090447912000858    
