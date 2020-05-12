@@ -60,18 +60,18 @@ def shooting(eta_range):
   thetainf = 0 # theta(eta -> infty) = 0
 
   # initial guess
-  f_initial_guess = 0.985 # guess for f''(0)
-  theta_initial_guess = -0.0815 # guess for theta'(0)
+  f_initial_guess = 1 # guess for f''(0)
+  theta_initial_guess = -0.1 # guess for theta'(0)
 
   # define our function to optimize
   # our goal is to take big eta because eta should approach infty
   # [-1, 1] : last row, second column => f'(eta_final) ~ f'(eta -> infty)
   # [-1, 3] : last row, fourth column => theta(eta_final) ~ theta(eta -> infty)
   fun_f = lambda initial_guess: rk4(eta_range, initial_guess, theta_initial_guess)[-1, 1] - fprimeinf
-  shoot_flow = secant(fun=fun_f, a0=f_initial_guess, b0=0.99)
+  shoot_flow = secant(fun=fun_f, a0=f_initial_guess, b0=1)
 
   fun_theta = lambda initial_guess: rk4(eta_range, f_initial_guess, initial_guess)[-1, 2] - thetainf
-  shoot_heat = secant(fun=fun_theta, a0=theta_initial_guess, b0=-0.08)
+  shoot_heat = secant(fun=fun_theta, a0=theta_initial_guess, b0=-1)
 
   # resolve our system of ODE with the good "a"
   y = rk4(eta_range, shoot_flow, shoot_heat)

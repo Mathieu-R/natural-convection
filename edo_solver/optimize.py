@@ -55,6 +55,8 @@ def secant(fun, a0, b0, iterations=1000):
     x = a - (fa * ((b - a) / (fb - fa)))
     fx = fun(x)
 
+    print(f"f(x) should -> 0 | f(x): {fx}")
+
     # determine the next interval
     if (fa * fx) < 0:
       a = a
@@ -77,7 +79,7 @@ def secant(fun, a0, b0, iterations=1000):
 
     # stop when our interval has reached some
     # predetermined length
-    if (abs(a - b) <= PRECISION):
+    if (abs(a - b) <= PRECISION and fx >= -0.005 and fx <= 0.005):
       print(f"root is approximately at eta={x}")
       return x
 
