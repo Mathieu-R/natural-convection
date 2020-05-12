@@ -16,7 +16,7 @@ class plot():
     ax.set_title("Convection naturelle - solution de similitude")
     ax.set_xlabel("$\\eta$")
     ax.set_xlim(0, plate.eta_max)
-    ax.set_ylim(0, 10)
+    #ax.set_ylim(0, 2)
     ax.legend(fontsize=11)
 
     plt.show()

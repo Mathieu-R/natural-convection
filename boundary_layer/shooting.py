@@ -23,7 +23,7 @@ class shooting():
     iterations = 200, precision = 1e-7
   ):
 
-    self.iterations = 200
+    self.iterations = 400
     self.precision = 1e-7
     self.guesses = guesses
     self.t_range = t_range

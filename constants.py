@@ -1,1 +1,0 @@
-PRECISION = 1e-7
