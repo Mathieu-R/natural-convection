@@ -71,7 +71,7 @@ class shooting():
 
 
   def do_we_get_closer_to_boundary_condition(self, boundary_error_0, boundary_error_1, guess_0, guess_1):
-    print(boundary_error_1, boundary_error_0)
+    print(f"convergence: {abs(boundary_error_1 - boundary_error_0)}")
     if (abs(boundary_error_1 - boundary_error_0) > 0.0):
       return -boundary_error_1 * ((guess_1 - guess_0) / float(boundary_error_1 - boundary_error_0))
     else:
@@ -116,6 +116,7 @@ class shooting():
           boundary_errors_0[index], boundary_errors_1[index],
           guess["guesses"][0], guess["guesses"][1]
         )
+        print(delta_boundary)
         delta_boundary_array.append(delta_boundary)
 
         # updating guesses
