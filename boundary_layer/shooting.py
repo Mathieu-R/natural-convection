@@ -79,7 +79,6 @@ class shooting():
 
   def first_guess(self):
     for guess in self.guesses:
-      print(guess)
       # try with the first guess for the unknown initial value
       self.initial_values[guess["guess_position"]] = guess["guesses"][0]
 
@@ -100,6 +99,8 @@ class shooting():
 
       for guess in self.guesses:
         self.initial_values[guess["guess_position"]] = guess["guesses"][1]
+
+      print(self.initial_values)
 
       # resolve ode
       f = odeint(func=self.df, y0=self.initial_values, t=self.t_range, args=self.args, tfirst=True)

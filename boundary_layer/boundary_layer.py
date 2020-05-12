@@ -18,14 +18,14 @@ class boundary_layer():
     # guesses
     self.f_guesses = {
       "guesses": [1e-2, 2],
-      "guess_position": 2,
-      "boundary_position": 1
+      "guess_position": 2, # f''(0)
+      "boundary_position": 1 # f'(eta -> infty)
     }
 
     self.theta_guesses = {
       "guesses": [-0,1, 0,1],
-      "guess_position": 1,
-      "boundary_position": 0
+      "guess_position": 4, # theta'(0)
+      "boundary_position": 3 # theta(eta -> infty)
     }
 
     self.T_w = 0
@@ -52,11 +52,13 @@ class boundary_layer():
     self.solve()
 
   def similitude_ode(self, t, y, Pr):
+    # y = [f, f', f'', theta, theta']
+    #      0  1    2     3      4
     return np.array([
       # flow edo
       y[1], # f' = df/dn
       y[2], # f'' = d^2f/dn^2
-      - 3 * y[0] * y[2] + (2 * math.pow(y[1], 2)) - y[3], # f''' = - 3ff'' + 2(f')^2 - theta,
+      - 3 * y[0] * y[2] + (2 * (y[1]**2)) - y[3], # f''' = - 3ff'' + 2(f')^2 - theta,
       # heat edo
       y[4], # theta' = dtheta/dn
       - 3 * Pr * y[0] * y[4], # theta'' = - 3 Pr f theta'
