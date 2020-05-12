@@ -18,18 +18,14 @@ precision: precision of the initial value (default: 1e-7).
 """
 class shooting():
   def __init__(
-    self, ode, initial_values, boundary_values, t_range,
-    guesses, guess_position, boundary_position,
-    args = (), iterations = 200, precision = 1e-7
+    self, ode, initial_values, boundary_values,
+    t_range, guesses, args = (),
+    iterations = 200, precision = 1e-7
   ):
-    super().__init__()
 
-    # [-1, -10e-5, 10e-5, 1]
     self.iterations = 200
     self.precision = 1e-7
     self.guesses = guesses
-    self.guess_position = guess_position
-    self.boundary_position = boundary_position
     self.t_range = t_range
 
     self.initial_values = initial_values
@@ -45,14 +41,19 @@ class shooting():
   e.g. f'(eta = "big_number") - f'(eta -> infty)
   """
   def boundary_error(self, f):
-    error = f[-1][self.boundary_position] - self.boundary_values[self.boundary_position]
-    return error
+    errors = []
+    for guess in self.guesses:
+      error = f[-1][guess["boundary_position"]] - self.boundary_values[guess["boundary_position"]]
+      errors.append(error)
+
+    return errors
 
   def plot_error_function(self):
     boundary_errors = []
     for guess in np.linspace(0, 5):
-      # put the guess
-      self.initial_values[self.guess_position] = guess
+      for guess in self.guesses:
+        # put the guess
+        self.initial_values[guess["guess_position"]] = guess["guesses"][1]
 
       # resolve edo
       f = odeint(func=self.df, y0=self.initial_values, t=self.t_range, args=self.args, tfirst=True)
@@ -68,46 +69,63 @@ class shooting():
     # plt.ylim(-1,4)
     # plt.grid(b=True, which='both')
 
-  def do_we_get_closer_to_boundary_condition(self, boundary_error_0, boundary_error_1):
+
+  def do_we_get_closer_to_boundary_condition(self, boundary_error_0, boundary_error_1, guess_0, guess_1):
     print(boundary_error_1, boundary_error_0)
     if (abs(boundary_error_1 - boundary_error_0) > 0.0):
-      return -boundary_error_1 * ((self.guesses[1] - self.guesses[0]) / float(boundary_error_1 - boundary_error_0))
+      return -boundary_error_1 * ((guess_1 - guess_0) / float(boundary_error_1 - boundary_error_0))
     else:
       return 0.0
 
   def first_guess(self):
-    # try with the first guess for the unknown initial value
-    self.initial_values[self.guess_position] = self.guesses[0]
+    for guess in self.guesses:
+      print(guess)
+      # try with the first guess for the unknown initial value
+      self.initial_values[guess["guess_position"]] = guess["guesses"][0]
 
-    # resolve ode
+      # resolve ode
     f = odeint(func=self.df, y0=self.initial_values, t=self.t_range, args=self.args, tfirst=True)
 
     # compute boundary error
-    boundary_error = self.boundary_error(f)
-    return boundary_error
+    boundary_errors = self.boundary_error(f)
+    return boundary_errors
 
   def shoot(self):
-    boundary_error_0 = self.first_guess()
+    boundary_errors_0 = self.first_guess()
 
     # loop until we get the solutions
     # that satisfies the boundary condition
     for i in range(self.iterations):
+      # updating initial value with the next guess
+
+      for guess in self.guesses:
+        self.initial_values[guess["guess_position"]] = guess["guesses"][1]
+
       # resolve ode
       f = odeint(func=self.df, y0=self.initial_values, t=self.t_range, args=self.args, tfirst=True)
 
       # compute boundary error
-      boundary_error_1 = self.boundary_error(f)
+      boundary_errors_1 = self.boundary_error(f)
 
-      # check if we get closer to the boundary condition
-      delta_boundary = self.do_we_get_closer_to_boundary_condition(boundary_error_0, boundary_error_1)
+      delta_boundary_array = []
 
-      # updating guesses
-      self.guesses[0] = self.guesses[1]
-      self.guesses[1] += delta_boundary
-      boundary_error_0 = boundary_error_1
+      # for each boundary value (1 array of guess = 1 boundary value)
+      for index, guess in enumerate(self.guesses):
+        # check if we get closer to the boundary condition
+        delta_boundary = self.do_we_get_closer_to_boundary_condition(
+          boundary_errors_0[index], boundary_errors_1[index],
+          guess["guesses"][0], guess["guesses"][1]
+        )
+        delta_boundary_array.append(delta_boundary)
+
+        # updating guesses
+        guess["guesses"][0] = guess["guesses"][1]
+        guess["guesses"][1] += delta_boundary
+        boundary_errors_0[index] = boundary_errors_1[index]
 
       # convergence criteria
-      if (abs(delta_boundary) <= self.precision):
+      if all(abs(delta_boundary) <= self.precision for delta_boundary in delta_boundary_array):
+        print("convergence criteria satisfied for each boundary value.")
         break
 
     return f

@@ -8,10 +8,25 @@ class boundary_layer():
     # initial conditions
     self.f0 = [0, 0, 0]
     self.theta0 = [1, 0]
+    self.initial_values = self.f0 + self.theta0
 
     # boundary conditions
     self.finf = [0, 0, 0]
     self.thetainf = [0, 0]
+    self.boundary_values = self.finf + self.thetainf
+
+    # guesses
+    self.f_guesses = {
+      "guesses": [1e-2, 2],
+      "guess_position": 2,
+      "boundary_position": 1
+    }
+
+    self.theta_guesses = {
+      "guesses": [-0,1, 0,1],
+      "guess_position": 1,
+      "boundary_position": 0
+    }
 
     self.T_w = 0
     self.T_e = 0
@@ -36,25 +51,12 @@ class boundary_layer():
 
     self.solve()
 
-  def flow_ode(self, t, f, theta):
-    return np.array([
-      f[1],
-      f[2],
-      -3 * f[0] * f[2] + (2 * (f[1]**2)) - theta[0]
-    ])
-
-  def heat_ode(self, t, theta, f, Pr):
-    return np.array([
-      theta[1],
-      -3 * Pr * f[0] * theta[1]
-    ])
-
   def similitude_ode(self, t, y, Pr):
     return np.array([
       # flow edo
       y[1], # f' = df/dn
       y[2], # f'' = d^2f/dn^2
-      - 3 * y[0] * y[2] + (2 * math.pow(f[1], 2)) - y[3], # f''' = - 3ff'' + 2(f')^2 - theta,
+      - 3 * y[0] * y[2] + (2 * math.pow(y[1], 2)) - y[3], # f''' = - 3ff'' + 2(f')^2 - theta,
       # heat edo
       y[4], # theta' = dtheta/dn
       - 3 * Pr * y[0] * y[4], # theta'' = - 3 Pr f theta'
@@ -69,25 +71,20 @@ class boundary_layer():
     pass
 
   def solve(self):
-    shoot = shooting(
-      ode=self.flow_ode, initial_values=self.f0, boundary_values=self.finf, t_range=self.plate.eta_range,
-      guesses=[1e-2, 2], guess_position=2, boundary_position=1,
-      args=(self.theta0,)
-    )
-
-    f = shoot.shoot()
-    self.f = f[:, 0]
-    self.df = f[:, 1]
-    self.ddf = f[:, 2]
+    # two boundary values = two guess at the same time
+    guesses = [self.f_guesses, self.theta_guesses]
 
     shoot = shooting(
-      ode=self.heat_ode, initial_values=self.theta0, boundary_values=self.thetainf, t_range=self.plate.eta_range,
-      guesses=[-0.1, 0.1], guess_position=1, boundary_position=0,
-      args=(self.f0, self.Pr,)
+      ode=self.similitude_ode, initial_values=self.initial_values, boundary_values=self.boundary_values,
+      t_range=self.plate.eta_range, guesses=guesses, args=(self.Pr,)
     )
 
-    theta = shoot.shoot()
-    self.theta = theta[:, 0]
-    self.dtheta = theta[:, 1]
+    y = shoot.shoot()
+    self.f = y[:, 0]
+    self.df = y[:, 1]
+    self.ddf = y[:, 2]
+
+    self.theta = y[:, 3]
+    self.dtheta = y[:, 4]
 
     self.compute_interesting_values()
