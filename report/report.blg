@@ -1,5 +1,0 @@
-[0] Config.pm:304> INFO - This is Biber 2.14
-[0] Config.pm:307> INFO - Logfile is 'report.blg'
-[123] biber-darwin:322> INFO - === Fri May  8, 2020, 11:02:04
-[370] Utils.pm:320> ERROR - Cannot find 'report.bcf'!
-[370] Biber.pm:132> INFO - ERRORS: 1
