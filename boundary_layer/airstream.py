@@ -1,8 +1,8 @@
 class airstream():
   def __init__(self, airspeed, length):
     self.ue = airspeed # air stream velocity
-    self.P = 101325 # Atmospheric pressure
-    self.Te = 300 # Air temperature (K)
+    self.P = 101325 # Atmospheric pressure (101 325 Pa)
+    self.Te = 300 # Air temperature (300 K ~ 26°C)
     self.lambd = 0.02 # Air thermal conductivity
     self.cp = 0.3 # Air specific heat
 

@@ -1,5 +1,7 @@
 import numpy as np
 
+MESH_POINTS = 500
+
 # We consider a vertical plate
 class plate():
   """
@@ -12,14 +14,14 @@ class plate():
     self.L = length
     self.Tw = t_wall
     self.eta_max = eta_max
-    self.eta_range = np.linspace(0, eta_max, 500)
+    self.eta_range = np.linspace(0, eta_max, MESH_POINTS)
 
   def mesh(self, delta_estimated, ue, nu):
-    n_x = 500
-    n_y = 500
+    n_x = MESH_POINTS
+    n_y = MESH_POINTS
 
-    self.x = self.L * np.logspace(-5,0, n_x + 1)
-    self.y = np.linspace(0,50 * delta_estimated, n_y + 1)
+    self.x = self.L * np.logspace(-5, 0, n_x + 1)
+    self.y = np.linspace(0, 50 * delta_estimated, n_y + 1)
 
     self.eta = np.linspace(0, 6, n_x+1)
 
