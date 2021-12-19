@@ -16,6 +16,28 @@ class plate():
     self.eta_max = eta_max
     self.eta_range = np.linspace(0, eta_max, MESH_POINTS)
 
+  def generate_discrete_space(self):
+    """Discretize the space of the flat plate. We are in the space (x, y) = (eta, L)
+    """
+
+    # flat plate size
+    width = self.eta_max
+    height = self.L
+
+    # space intervals
+    d_eta = dL = 0.05
+
+    # number of steps
+    n_eta = int(width/d_eta)
+    nL = int(height/dL)
+
+    # mesh points in space
+    self.x_mesh = np.linspace(start=0, stop=self.eta_max, num=n_eta+1)
+    self.y_mesh = np.linspace(start=0, stop=self.L, num=nL+1)
+
+    # 5 equations so 5 lines
+    self.u = np.zeros((5, self.x_mesh.size))
+
   def mesh(self, delta_estimated, ue, nu):
     n_x = MESH_POINTS
     n_y = MESH_POINTS
