@@ -9,6 +9,6 @@ Pillow==8.4.0
 pyparsing==3.0.6
 python-dateutil==2.8.2
 SciencePlots==1.0.9
-scipy==1.7.3
+scipy==1.10.0
 six==1.16.0
 tqdm==4.62.3
